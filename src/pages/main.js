@@ -14,7 +14,9 @@ export default class Main extends Component {
   };
 
   state = {
-    docs: []
+    productInfo: {},
+    docs: [],
+    page: 1
     //counter: 0
   };
 
@@ -22,14 +24,24 @@ export default class Main extends Component {
     this.loadProducts();
   }
 
-  loadProducts = async () => {
-    const response = await api.get("/products");
+  loadProducts = async (page = 1) => {
+    const response = await api.get(`/products?page=${page}`);
 
-    const { docs } = response.data;
+    const { docs, ...productInfo } = response.data;
 
     console.log(docs);
-    this.setState({ docs });
+    this.setState({ docs: [...this.state.docs, ...docs], productInfo, page });
     //this.setState({ counter: docs.length });
+  };
+
+  loadMore = () => {
+    const { page, productInfo } = this.state;
+
+    if (page === productInfo.pages) return;
+
+    const pageNumber = page + 1;
+
+    this.loadProducts(pageNumber);
   };
 
   renderItem = ({ item }) => (
@@ -50,6 +62,8 @@ export default class Main extends Component {
           data={this.state.docs}
           keyExtractor={item => item._id}
           renderItem={this.renderItem}
+          onEndReached={this.loadMore}
+          onEndReachedThreshold={0.1}
         />
         {/* <Text>Pagina Main: {this.state.counter}</Text> */}
         {/* {this.state.docs.map(product => (
