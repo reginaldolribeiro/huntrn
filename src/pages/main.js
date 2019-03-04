@@ -3,7 +3,6 @@ import api from "../services/api";
 import {
   View,
   Text,
-  TextInput,
   FlatList,
   TouchableOpacity,
   StyleSheet
@@ -57,7 +56,6 @@ export default class Main extends Component {
       >
         <Text style={styles.productButtonText}>Acessar</Text>
       </TouchableOpacity>
-      <TextInput style={{ height: 40, borderColor: "gray", borderWidth: 1 }} />
     </View>
   );
 
